@@ -1,2 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<testsuites tests="1" errors="0" failures="0"><testsuite name="physics_sim" tests="1" errors="0" failures="0" skipped="0" time="0.003145456314086914"><testcase name="basic" classname="physics_sim" time="0.003145456314086914"><system-out>hello world</system-out></testcase></testsuite></testsuites>
