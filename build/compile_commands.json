@@ -1,0 +1,8 @@
+[
+  {
+    "directory": "/home/novux/Documents/Coding/physics_sim/build",
+    "command": "c++ -Iphysics_sim.p -I. -I.. -fdiagnostics-color=always -D_GLIBCXX_ASSERTIONS=1 -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wextra -Wpedantic -O0 -g -MD -MQ physics_sim.p/src_main.cpp.o -MF physics_sim.p/src_main.cpp.o.d -o physics_sim.p/src_main.cpp.o -c ../src/main.cpp",
+    "file": "../src/main.cpp",
+    "output": "physics_sim.p/src_main.cpp.o"
+  }
+]

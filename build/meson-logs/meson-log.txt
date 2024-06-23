@@ -1,0 +1,105 @@
+Build started at 2024-06-23T00:07:59.480757
+Main binary: /usr/bin/python
+Build Options: 
+Python system: Linux
+The Meson build system
+Version: 1.4.1
+Source dir: /home/novux/Documents/Coding/physics_sim
+Build dir: /home/novux/Documents/Coding/physics_sim/build
+Build type: native build
+Project name: physics_sim
+Project version: 0.1
+C++ compiler for the host machine: c++ (gcc 14.1.1 "c++ (GCC) 14.1.1 20240522")
+C++ linker for the host machine: c++ ld.bfd 2.42.0
+-----------
+Detecting archiver via: `gcc-ar --version` -> 0
+stdout:
+GNU ar (GNU Binutils) 2.42.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) any later version.
+This program has absolutely no warranty.
+-----------
+C++ compiler for the build machine: c++ (gcc 14.1.1 "c++ (GCC) 14.1.1 20240522")
+C++ linker for the build machine: c++ ld.bfd 2.42.0
+-----------
+Detecting archiver via: `gcc-ar --version` -> 0
+stdout:
+GNU ar (GNU Binutils) 2.42.0
+Copyright (C) 2024 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) any later version.
+This program has absolutely no warranty.
+-----------
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Target machine cpu family: x86_64
+Target machine cpu: x86_64
+Build targets in project: 1
+
+Found ninja-1.12.1 at /usr/bin/ninja
+Running compile:
+Working directory:  /home/novux/Documents/Coding/physics_sim/build/meson-private/tmpsjzg7jbm
+Code:
+ 
+        #ifdef __has_include
+         #if !__has_include("<version>")
+          #error "Header '<version>' could not be found"
+         #endif
+        #else
+         #include <<version>>
+        #endif
+-----------
+Command line: `c++ /home/novux/Documents/Coding/physics_sim/build/meson-private/tmpsjzg7jbm/testfile.cpp -E -P -D_FILE_OFFSET_BITS=64 -P -O0 -fpermissive` -> 1
+stderr:
+/home/novux/Documents/Coding/physics_sim/build/meson-private/tmpsjzg7jbm/testfile.cpp:4:12: error: #error "Header '<version>' could not be found"
+    4 |           #error "Header '<version>' could not be found"
+      |            ^~~~~
+-----------
+Running compile:
+Working directory:  /home/novux/Documents/Coding/physics_sim/build/meson-private/tmp3hwzpxu_
+Code:
+ 
+        #include <version>
+        int main(void) {
+            /* If it's not defined as a macro, try to use as a symbol */
+            #ifndef _LIBCPP_VERSION
+                _LIBCPP_VERSION;
+            #endif
+            return 0;
+        }
+-----------
+Command line: `c++ /home/novux/Documents/Coding/physics_sim/build/meson-private/tmp3hwzpxu_/testfile.cpp -o /home/novux/Documents/Coding/physics_sim/build/meson-private/tmp3hwzpxu_/output.obj -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive` -> 1
+stderr:
+/home/novux/Documents/Coding/physics_sim/build/meson-private/tmp3hwzpxu_/testfile.cpp: In function 'int main()':
+/home/novux/Documents/Coding/physics_sim/build/meson-private/tmp3hwzpxu_/testfile.cpp:6:17: error: '_LIBCPP_VERSION' was not declared in this scope
+    6 |                 _LIBCPP_VERSION;
+      |                 ^~~~~~~~~~~~~~~
+-----------
+Running compile:
+Working directory:  /home/novux/Documents/Coding/physics_sim/build/meson-private/tmpq2bra2vl
+Code:
+ 
+        #include <version>
+        using _LIBCPP_VERSION;
+        int main(void) { return 0; }
+-----------
+Command line: `c++ /home/novux/Documents/Coding/physics_sim/build/meson-private/tmpq2bra2vl/testfile.cpp -o /home/novux/Documents/Coding/physics_sim/build/meson-private/tmpq2bra2vl/output.obj -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive` -> 1
+stderr:
+/home/novux/Documents/Coding/physics_sim/build/meson-private/tmpq2bra2vl/testfile.cpp:3:15: error: expected nested-name-specifier before '_LIBCPP_VERSION'
+    3 |         using _LIBCPP_VERSION;
+      |               ^~~~~~~~~~~~~~~
+-----------
+Running compile:
+Working directory:  /home/novux/Documents/Coding/physics_sim/build/meson-private/tmpdu68nb0n
+Code:
+ 
+-----------
+Command line: `c++ /home/novux/Documents/Coding/physics_sim/build/meson-private/tmpdu68nb0n/testfile.cpp -o /home/novux/Documents/Coding/physics_sim/build/meson-private/tmpdu68nb0n/output.obj -c -D_FILE_OFFSET_BITS=64 -O0 -fpermissive --print-search-dirs` -> 0
+stdout:
+install: /usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/
+programs: =/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/../../../../x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu/14.1.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/../../../../x86_64-pc-linux-gnu/bin/
+libraries: =/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/../../../../x86_64-pc-linux-gnu/lib/x86_64-pc-linux-gnu/14.1.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/../../../../x86_64-pc-linux-gnu/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/../../../x86_64-pc-linux-gnu/14.1.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/../../../../lib/:/lib/x86_64-pc-linux-gnu/14.1.1/:/lib/../lib/:/usr/lib/x86_64-pc-linux-gnu/14.1.1/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/../../../../x86_64-pc-linux-gnu/lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/14.1.1/../../../:/lib/:/usr/lib/
+-----------
