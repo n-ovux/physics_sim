@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "shader.h"
+
 #define WIDTH 900
 #define HEIGHT 600
 
@@ -53,52 +55,11 @@ int main(void) {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  const char *vertexShaderSource = "#version 330 core\n"
-                                   "layout (location = 0) in vec2 aPos;\n"
-                                   "void main()\n"
-                                   "{\n"
-                                   "   gl_Position = vec4(aPos, 0.0, 1.0);\n"
-                                   "}\0";
-  uint32_t vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glCompileShader(vertexShader);
-  int success;
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    char infoLog[512];
-    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    printf("failed to compile vertex shader: %s", infoLog);
-  }
-
-  const char *fragmentShaderSource =
-      "#version 330 core\n"
-      "out vec4 FragColor;\n"
-      "void main()\n"
-      "{\n"
-      "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-      "}\0";
-  uint32_t fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-  glCompileShader(fragmentShader);
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-  if (!success) {
-    char infoLog[512];
-    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-    printf("failed to compile fragment shader: %s", infoLog);
-  }
-
-  uint32_t shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
-  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (!success) {
-    char infoLog[512];
-    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    printf("failed to link shader program: %s", infoLog);
-  }
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
+  uint32_t vertexShader =
+      createShader("../src/shaders/default.vert", GL_VERTEX_SHADER);
+  uint32_t fragmentShader =
+      createShader("../src/shaders/default.frag", GL_FRAGMENT_SHADER);
+  uint32_t shaderProgram = createProgram(2, vertexShader, fragmentShader);
 
   glViewport(0, 0, WIDTH, HEIGHT);
   glEnable(GL_MULTISAMPLE);
