@@ -4,7 +4,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include "logging.h"
 #include "shader.h"
 
 #define WIDTH 900
@@ -14,8 +16,9 @@ GLFWwindow *window;
 
 int main(void) {
 
-  if (!glfwInit())
-    return -1;
+  if (!glfwInit()) {
+    err("failed to initialize glfw");
+  }
 
   glfwDefaultWindowHints();
   glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -28,7 +31,7 @@ int main(void) {
   window = glfwCreateWindow(WIDTH, HEIGHT, "Physics Sim", NULL, NULL);
   if (!window) {
     glfwTerminate();
-    return -1;
+    err("Failed to make window");
   }
 
   glfwMakeContextCurrent(window);
@@ -37,9 +40,7 @@ int main(void) {
 
   GLenum err = glewInit();
   if (err != GLEW_OK) {
-    printf("Failed to initialize glew: %s\n", glewGetErrorString(err));
-    glfwTerminate();
-    exit(1);
+    err("Failed to initialize glew");
   }
 
   float vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};

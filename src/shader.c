@@ -6,14 +6,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "logging.h"
 #include "shader.h"
 
 uint32_t createShader(char *sourceFile, uint32_t type) {
   FILE *file;
   file = fopen(sourceFile, "r");
   if (file == NULL) {
-    printf("failed to open file: %s\n", sourceFile);
+    err("Fail to open file");
   }
+
   char *source = calloc(256, sizeof(char));
   char line[256];
   while (fgets(line, 256, file) != NULL) {
@@ -28,6 +30,7 @@ uint32_t createShader(char *sourceFile, uint32_t type) {
   if (!success) {
     char infoLog[512];
     glGetShaderInfoLog(shader, 512, NULL, infoLog);
+    err(infoLog);
   }
   return shader;
 }
@@ -48,7 +51,7 @@ uint32_t createProgram(int numberOfShaders, ...) {
   if (!success) {
     char infoLog[512];
     glGetProgramInfoLog(program, 512, NULL, infoLog);
-    printf("failed to link shader program: %s", infoLog);
+    err(infoLog);
   }
 
   va_start(shaders, numberOfShaders);
