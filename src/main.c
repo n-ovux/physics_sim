@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <pthread.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,10 +13,8 @@
 #define WIDTH 900
 #define HEIGHT 600
 
-GLFWwindow *window;
-
-int main(void) {
-
+void *render(void *arg) {
+  GLFWwindow *window;
   if (!glfwInit()) {
     err("failed to initialize glfw");
   }
@@ -77,5 +76,12 @@ int main(void) {
   }
 
   glfwTerminate();
+  pthread_exit(NULL);
+}
+
+int main(void) {
+  pthread_t renderThread;
+  pthread_create(&renderThread, NULL, &render, NULL);
+  pthread_join(renderThread, NULL);
   return 0;
 }
