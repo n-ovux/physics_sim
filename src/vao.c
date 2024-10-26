@@ -7,13 +7,21 @@
 #include "logging.h"
 #include "vao.h"
 
-uint32_t createVAO(float vertices[], size_t size, int numberOfAttributes, ...) {
-  uint32_t VAO, VBO;
+uint32_t createVAO(float vertices[], size_t verticesSize, uint32_t indices[], size_t indicesSize,
+                   int numberOfAttributes, ...) {
+  uint32_t VAO, VBO, EBO;
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
   glBindVertexArray(VAO);
+
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
+
+  if (indices != NULL) {
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
+  }
 
   va_list types;
   size_t totalSize = 0;

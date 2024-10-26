@@ -48,11 +48,20 @@ int main(void) {
     error("Failed to initialize glew");
 
   // clang-format off
-  float vertices[] = {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 
-                       0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 
-                       0.0f,  0.5f, -0.5f, 0.0f, 0.0f, 1.0f};
+  float vertices[] = {
+    -1, -1, 0, 1.0f, 0.0f, 0.0f, 
+    -1,  1, 0, 0.0f, 1.0f, 0.0f, 
+     1, -1, 0, 0.0f, 0.0f, 1.0f, 
+     1,  1, 0, 1.0f, 1.0f, 1.0f
+  };
+
+  uint32_t indices[] = {
+    0, 1, 2,
+    1, 2, 3
+  };
   // clang-format on
-  uint32_t VAO = createVAO(vertices, sizeof(vertices), 2, GL_FLOAT, 3, GL_FLOAT, 3);
+
+  uint32_t VAO = createVAO(vertices, sizeof(vertices), indices, sizeof(indices), 2, GL_FLOAT, 3, GL_FLOAT, 3);
 
   uint32_t vertexShader = createShader("../src/shaders/default.vert", GL_VERTEX_SHADER);
   uint32_t fragmentShader = createShader("../src/shaders/default.frag", GL_FRAGMENT_SHADER);
@@ -83,6 +92,7 @@ int main(void) {
     printf("\rfps: %.3f  mspf: %.3f", 1.0f / deltaTime, deltaTime * 1000.0f);
     glClearColor(0.23f, 0.24f, 0.30f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glfwGetCursorPos(window, &xpos, &ypos);
     vec2 cursorPosition = {xpos, ypos};
@@ -132,6 +142,10 @@ int main(void) {
       glm_vec3_add(cameraPosition, temp, cameraPosition);
     }
 
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+
     glm_vec3_add(front, cameraPosition, front);
     glm_lookat(cameraPosition, front, up, view);
 
@@ -140,7 +154,8 @@ int main(void) {
     glUniformMatrix4fv(glGetUniformLocation(shader, "uView"), 1, GL_FALSE, view[0]);
     glUniformMatrix4fv(glGetUniformLocation(shader, "uProjection"), 1, GL_FALSE, projection[0]);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    /*glDrawArrays(GL_TRIANGLES, 0, 3);*/
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
