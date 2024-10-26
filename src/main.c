@@ -9,6 +9,7 @@
 
 #include "logging.h"
 #include "shader.h"
+#include "vertex.h"
 
 #define WIDTH 900
 #define HEIGHT 600
@@ -43,17 +44,7 @@ void *render(void *arg) {
   }
 
   float vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
-
-  uint32_t VAO, VBO;
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
-  glBindVertexArray(VAO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void *)0);
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  uint32_t VAO = createVAO(vertices, sizeof(vertices), 1, GL_FLOAT, 2);
 
   uint32_t vertexShader =
       createShader("../src/shaders/default.vert", GL_VERTEX_SHADER);
