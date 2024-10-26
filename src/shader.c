@@ -15,7 +15,7 @@ uint32_t createShader(char *sourceFile, uint32_t type) {
   if (file == NULL)
     error("Fail to open file");
 
-  char *source = calloc(256, sizeof(char));
+  char *source = calloc(2048, sizeof(char));
   char line[256];
   while (fgets(line, 256, file) != NULL) {
     strcat(source, line);
@@ -24,6 +24,7 @@ uint32_t createShader(char *sourceFile, uint32_t type) {
   glShaderSource(shader, 1, (const char *const *)&source, NULL);
   glCompileShader(shader);
   free(source);
+
   int success;
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
   if (!success) {

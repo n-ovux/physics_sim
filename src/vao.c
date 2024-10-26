@@ -5,7 +5,7 @@
 #include <string.h>
 
 #include "logging.h"
-#include "vertex.h"
+#include "vao.h"
 
 uint32_t createVAO(float vertices[], size_t size, int numberOfAttributes, ...) {
   uint32_t VAO, VBO;
@@ -32,7 +32,7 @@ uint32_t createVAO(float vertices[], size_t size, int numberOfAttributes, ...) {
     int amount = va_arg(types, int);
     glVertexAttribPointer(i, amount, type, GL_FALSE, totalSize, (void *)partialSize);
     glEnableVertexAttribArray(i);
-    partialSize += glSizeOf(type);
+    partialSize += amount * glSizeOf(type);
   }
   va_end(types);
 
@@ -51,4 +51,5 @@ size_t glSizeOf(uint32_t type) {
   default:
     error("failed to find type");
   }
+  return -1;
 }

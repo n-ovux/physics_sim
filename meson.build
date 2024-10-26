@@ -1,8 +1,8 @@
 project('physics_sim', 'c')
 
-glew_dep = dependency('glew')
-glfw3_dep = dependency('glfw3')
-cglm_dep = dependency('cglm')
-pthreads_dep = dependency('threads')
+cc = meson.get_compiler('c')
+dependencies = [dependency('glew'), dependency('glfw3'), dependency('cglm'), dependency('threads'), cc.find_library('m')]
 
-executable('physics_sim', './src/main.c', './src/shader.c', './src/vertex.c', './src/logging.c', dependencies: [glew_dep, glfw3_dep, cglm_dep, pthreads_dep])
+sources = ['./src/main.c', './src/shader.c', './src/vao.c', './src/logging.c']
+
+executable('physics_sim', sources, dependencies: dependencies)
