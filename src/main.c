@@ -16,9 +16,8 @@
 
 void *render(void *arg) {
   GLFWwindow *window;
-  if (!glfwInit()) {
-    err("failed to initialize glfw");
-  }
+  if (!glfwInit())
+    error("failed to initialize glfw");
 
   glfwDefaultWindowHints();
   glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -29,27 +28,22 @@ void *render(void *arg) {
   glfwWindowHint(GLFW_SAMPLES, 4);
 
   window = glfwCreateWindow(WIDTH, HEIGHT, "Physics Sim", NULL, NULL);
-  if (!window) {
-    glfwTerminate();
-    err("Failed to make window");
-  }
+  if (!window)
+    error("Failed to make window");
 
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
   glfwShowWindow(window);
 
   GLenum err = glewInit();
-  if (err != GLEW_OK) {
-    err("Failed to initialize glew");
-  }
+  if (err != GLEW_OK)
+    error("Failed to initialize glew");
 
   float vertices[] = {-0.5f, -0.5f, 0.5f, -0.5f, 0.0f, 0.5f};
   uint32_t VAO = createVAO(vertices, sizeof(vertices), 1, GL_FLOAT, 2);
 
-  uint32_t vertexShader =
-      createShader("../src/shaders/default.vert", GL_VERTEX_SHADER);
-  uint32_t fragmentShader =
-      createShader("../src/shaders/default.frag", GL_FRAGMENT_SHADER);
+  uint32_t vertexShader = createShader("../src/shaders/default.vert", GL_VERTEX_SHADER);
+  uint32_t fragmentShader = createShader("../src/shaders/default.frag", GL_FRAGMENT_SHADER);
   uint32_t shaderProgram = createProgram(2, vertexShader, fragmentShader);
 
   glViewport(0, 0, WIDTH, HEIGHT);

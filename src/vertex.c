@@ -30,8 +30,7 @@ uint32_t createVAO(float vertices[], size_t size, int numberOfAttributes, ...) {
   for (int i = 0; i < numberOfAttributes; i++) {
     uint32_t type = va_arg(types, uint32_t);
     int amount = va_arg(types, int);
-    glVertexAttribPointer(i, amount, type, GL_FALSE, totalSize,
-                          (void *)partialSize);
+    glVertexAttribPointer(i, amount, type, GL_FALSE, totalSize, (void *)partialSize);
     glEnableVertexAttribArray(i);
     partialSize += glSizeOf(type);
   }
@@ -50,6 +49,6 @@ size_t glSizeOf(uint32_t type) {
   case GL_INT:
     return sizeof(int);
   default:
-    err("failed to find type");
+    error("failed to find type");
   }
 }

@@ -12,9 +12,8 @@
 uint32_t createShader(char *sourceFile, uint32_t type) {
   FILE *file;
   file = fopen(sourceFile, "r");
-  if (file == NULL) {
-    err("Fail to open file");
-  }
+  if (file == NULL)
+    error("Fail to open file");
 
   char *source = calloc(256, sizeof(char));
   char line[256];
@@ -30,7 +29,7 @@ uint32_t createShader(char *sourceFile, uint32_t type) {
   if (!success) {
     char infoLog[512];
     glGetShaderInfoLog(shader, 512, NULL, infoLog);
-    err(infoLog);
+    error(infoLog);
   }
   return shader;
 }
@@ -51,7 +50,7 @@ uint32_t createProgram(int numberOfShaders, ...) {
   if (!success) {
     char infoLog[512];
     glGetProgramInfoLog(program, 512, NULL, infoLog);
-    err(infoLog);
+    error(infoLog);
   }
 
   va_start(shaders, numberOfShaders);
