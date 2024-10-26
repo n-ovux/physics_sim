@@ -40,7 +40,6 @@ int main(void) {
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
   glfwShowWindow(window);
-
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
   GLenum err = glewInit();
@@ -48,32 +47,67 @@ int main(void) {
     error("Failed to initialize glew");
 
   // clang-format off
-  float vertices[] = {
-    -1, -1, 0, 1.0f, 0.0f, 0.0f, 
-    -1,  1, 0, 0.0f, 1.0f, 0.0f, 
-     1, -1, 0, 0.0f, 0.0f, 1.0f, 
-     1,  1, 0, 1.0f, 1.0f, 1.0f
+  float cubeVertices[] = {
+     -1, -1,  1, //0
+      1, -1,  1, //1
+     -1,  1,  1, //2
+      1,  1,  1, //3
+     -1, -1, -1, //4
+      1, -1, -1, //5
+     -1,  1, -1, //6
+      1,  1, -1  //7
   };
 
-  uint32_t indices[] = {
-    0, 1, 2,
-    1, 2, 3
+  uint32_t cubeIndices[] = {
+      //Top
+      2, 6, 7,
+      2, 3, 7,
+      //Bottom
+      0, 4, 5,
+      0, 1, 5,
+      //Left
+      0, 2, 6,
+      0, 4, 6,
+      //Right
+      1, 3, 7,
+      1, 5, 7,
+      //Front
+      0, 2, 3,
+      0, 1, 3,
+      //Back
+      4, 6, 7,
+      4, 5, 7
+  };
+  float planeVertices[] = {
+    -1, 0, -1,
+     1, 0, -1,
+     1, 0,  1,
+    -1, 0,  1,
+  };
+
+  uint32_t planeIndices[] = {
+    0, 1, 2, 
+    0, 3, 2
   };
   // clang-format on
 
-  uint32_t VAO = createVAO(vertices, sizeof(vertices), indices, sizeof(indices), 2, GL_FLOAT, 3, GL_FLOAT, 3);
+  uint32_t cubeVAO = createVAO(cubeVertices, sizeof(cubeVertices), cubeIndices, sizeof(cubeIndices), 1, GL_FLOAT, 3);
+  uint32_t planeVAO =
+      createVAO(planeVertices, sizeof(planeVertices), planeIndices, sizeof(planeIndices), 1, GL_FLOAT, 3);
 
   uint32_t vertexShader = createShader("../src/shaders/default.vert", GL_VERTEX_SHADER);
   uint32_t fragmentShader = createShader("../src/shaders/default.frag", GL_FRAGMENT_SHADER);
   uint32_t shader = createProgram(2, vertexShader, fragmentShader);
 
-  mat4 model = GLM_MAT4_IDENTITY_INIT;
+  mat4 cubeModel = GLM_MAT4_IDENTITY_INIT;
+  mat4 planeModel = GLM_MAT4_IDENTITY_INIT;
+  glm_translate(planeModel, (vec3){0, -1.001, 0});
+  glm_scale(planeModel, (vec3){4, 0, 4});
   mat4 view = GLM_MAT4_IDENTITY_INIT;
   mat4 projection = GLM_MAT4_IDENTITY_INIT;
-  glm_scale_make(model, (vec3){1.0f, 1.0f, 1.0});
   glm_perspective(M_PI / 3, (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f, projection);
 
-  vec3 cameraPosition = {0.0f, 0.0f, 0.0f};
+  vec3 cameraPosition = GLM_VEC3_ZERO_INIT;
   float cameraPitch = 0.0f;
   float cameraYaw = 0.0f;
 
@@ -83,6 +117,7 @@ int main(void) {
 
   glViewport(0, 0, WIDTH, HEIGHT);
   glEnable(GL_MULTISAMPLE);
+  glEnable(GL_DEPTH_TEST);
   float currentTime = glfwGetTime();
   float lastTime = currentTime;
   while (!glfwWindowShouldClose(window)) {
@@ -91,7 +126,7 @@ int main(void) {
     lastTime = currentTime;
     printf("\rfps: %.3f  mspf: %.3f", 1.0f / deltaTime, deltaTime * 1000.0f);
     glClearColor(0.23f, 0.24f, 0.30f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     glfwGetCursorPos(window, &xpos, &ypos);
@@ -150,11 +185,17 @@ int main(void) {
     glm_lookat(cameraPosition, front, up, view);
 
     glUseProgram(shader);
-    glUniformMatrix4fv(glGetUniformLocation(shader, "uModel"), 1, GL_FALSE, model[0]);
     glUniformMatrix4fv(glGetUniformLocation(shader, "uView"), 1, GL_FALSE, view[0]);
     glUniformMatrix4fv(glGetUniformLocation(shader, "uProjection"), 1, GL_FALSE, projection[0]);
-    glBindVertexArray(VAO);
-    /*glDrawArrays(GL_TRIANGLES, 0, 3);*/
+
+    glUniform3f(glGetUniformLocation(shader, "uColor"), 1.0f, 1.0f, 1.0f);
+    glUniformMatrix4fv(glGetUniformLocation(shader, "uModel"), 1, GL_FALSE, cubeModel[0]);
+    glBindVertexArray(cubeVAO);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+    glUniform3f(glGetUniformLocation(shader, "uColor"), 0.5f, 0.5f, 0.5f);
+    glUniformMatrix4fv(glGetUniformLocation(shader, "uModel"), 1, GL_FALSE, planeModel[0]);
+    glBindVertexArray(planeVAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(window);
