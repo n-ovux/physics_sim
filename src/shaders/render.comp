@@ -3,10 +3,19 @@
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 uniform layout(binding = 0, rgba32f) writeonly image2D screen;
 
+uniform vec2 circles[250];
+uniform float radius;
+
 void main() {
     ivec2 coordinate = ivec2(gl_GlobalInvocationID.xy);
     vec3 color = vec3(0.0, 0.0, 0.0);
-    color.r = coordinate.x / float(gl_NumWorkGroups.x);
-    color.g = coordinate.y / float(gl_NumWorkGroups.y);
+
+    float on = 0;
+    for (int i = 0; i < circles.length(); i++) {
+        on += step(pow(circles[i].x - coordinate.x, 2) + pow(circles[i].y - coordinate.y, 2), pow(radius, 2));
+    }
+    color.r = on;
+    color.g = on;
+    color.b = on;
     imageStore(screen, coordinate, vec4(color, 1.0));
 }
