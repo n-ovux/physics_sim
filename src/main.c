@@ -75,7 +75,7 @@ int main(void) {
   uint32_t renderShader = createShader("../src/shaders/render.comp", GL_COMPUTE_SHADER);
   uint32_t render = createProgram(1, renderShader);
 
-  float radius = 10;
+  float radius = 5;
   int circleCount = 250;
   vec2 circlePositions[circleCount];
   for (int i = 0; i < circleCount; i++) {
@@ -104,37 +104,40 @@ int main(void) {
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    for (int i = 0; i < circleCount; i++) {
-      circlePositions[i][0] = 2 * circlePositionsLast[i][0] - circlePositionsLastLast[i][0] +
-                              circleAccelerations[i][0] * deltaTime * deltaTime;
-      circlePositions[i][1] = 2 * circlePositionsLast[i][1] - circlePositionsLastLast[i][1] +
-                              circleAccelerations[i][1] * deltaTime * deltaTime;
-      if (circlePositions[i][1] < radius)
-        circlePositions[i][1] = radius;
-      if (circlePositions[i][1] > HEIGHT - radius)
-        circlePositions[i][1] = HEIGHT - radius;
-      if (circlePositions[i][0] < radius)
-        circlePositions[i][0] = radius;
-      if (circlePositions[i][0] > WIDTH - radius)
-        circlePositions[i][0] = WIDTH - radius;
+    int subSteps = 8;
+    float subDeltaTime = deltaTime / subSteps;
+    for (int step = 0; step < subSteps; step++) {
+      for (int i = 0; i < circleCount; i++) {
+        circlePositions[i][0] = 2 * circlePositionsLast[i][0] - circlePositionsLastLast[i][0] +
+                                circleAccelerations[i][0] * subDeltaTime * subDeltaTime;
+        circlePositions[i][1] = 2 * circlePositionsLast[i][1] - circlePositionsLastLast[i][1] +
+                                circleAccelerations[i][1] * subDeltaTime * subDeltaTime;
+        if (circlePositions[i][1] < radius)
+          circlePositions[i][1] = radius;
+        if (circlePositions[i][1] > HEIGHT - radius)
+          circlePositions[i][1] = HEIGHT - radius;
+        if (circlePositions[i][0] < radius)
+          circlePositions[i][0] = radius;
+        if (circlePositions[i][0] > WIDTH - radius)
+          circlePositions[i][0] = WIDTH - radius;
 
-      vec2 temp = GLM_VEC2_ZERO_INIT;
-      for (int j = 0; j < circleCount; j++) {
-        glm_vec2_sub(circlePositions[i], circlePositions[j], temp);
-        float distance = glm_vec2_norm(temp);
-        if (distance < 2 * radius && distance != 0) {
-          float delta = 2 * radius - distance;
-          glm_vec2_scale(temp, 0.5f * delta * (1 / distance), temp);
-          glm_vec2_add(circlePositions[i], temp, circlePositions[i]);
-          glm_vec2_sub(circlePositions[j], temp, circlePositions[j]);
+        vec2 temp = GLM_VEC2_ZERO_INIT;
+        for (int j = 0; j < circleCount; j++) {
+          glm_vec2_sub(circlePositions[i], circlePositions[j], temp);
+          float distance = glm_vec2_norm(temp);
+          if (distance < 2 * radius && distance != 0) {
+            float delta = 2 * radius - distance;
+            glm_vec2_scale(temp, 0.5f * delta * (1 / distance), temp);
+            glm_vec2_add(circlePositions[i], temp, circlePositions[i]);
+            glm_vec2_sub(circlePositions[j], temp, circlePositions[j]);
+          }
         }
       }
+      for (int i = 0; i < circleCount; i++)
+        glm_vec2_copy(circlePositionsLast[i], circlePositionsLastLast[i]);
+      for (int i = 0; i < circleCount; i++)
+        glm_vec2_copy(circlePositions[i], circlePositionsLast[i]);
     }
-
-    for (int i = 0; i < circleCount; i++)
-      glm_vec2_copy(circlePositionsLast[i], circlePositionsLastLast[i]);
-    for (int i = 0; i < circleCount; i++)
-      glm_vec2_copy(circlePositions[i], circlePositionsLast[i]);
 
     glUseProgram(render);
     glBindImageTexture(0, screen, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
